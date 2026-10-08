@@ -1,0 +1,46 @@
+<div class="voting-table">
+  <div class="voting-table__outer">
+    <div class="voting-table__middle">
+      <div class="voting-table__inner">
+
+        @if (showRevealButton()) {
+          <app-button variant="ghost" size="md" (click)="revealCards.emit()">
+            Revelar cartas
+          </app-button>
+        }
+
+        @if (showCountingState()) {
+          <app-counting-state />
+        }
+
+        @if (gameStatus() === 'revealed' && isAdmin()) {
+          <app-button variant="ghost" size="md" (click)="resetGame.emit()">
+            Nueva votación
+          </app-button>
+        }
+
+      </div>
+    </div>
+  </div>
+
+  <div class="voting-table__players">
+    @for (player of players(); track player.id; let i = $index) {
+      <div class="voting-table__player" [style.--angle]="getAngle(i, players().length) + 'rad'">
+        <app-player-card
+          [playerName]="player.name"
+          [isSpectator]="player.mode === 'spectator'"
+          [isCurrentUser]="player.id === currentUserId()"
+          [cardState]="getCardState(player)"
+          [cardValue]="gameStatus() === 'revealed' ? player.selectedCard : null"
+          [cardVariant]="'table'"
+          [menuDirection]="getMenuDirection(i, players().length)"
+          [isAdmin]="isAdmin()"
+          [isPlayerAdmin]="player.role === 'admin'"
+          [isMenuOpen]="openMenuPlayerId() === player.id"
+          (menuToggle)="openMenuPlayerId.set(openMenuPlayerId() === player.id ? null : player.id)"
+          (promotePlayer)="promotePlayer.emit(player.id); openMenuPlayerId.set(null)"
+        />
+      </div>
+    }
+  </div>
+</div>

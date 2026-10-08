@@ -1,0 +1,26 @@
+<div class="user-form__overlay">
+  <div class="user-form">
+    <h2 class="user-form__title">{{ title() }}</h2>
+    <app-input
+      [value]="name()"
+      [hasError]="touched() && !!errorMessage()"
+      [errorMessage]="errorMessage()"
+      (valueChange)="onNameChange($event)"
+      (enterPressed)="onSubmit()"
+    />
+    <app-radio-group
+      [options]="modeOptions"
+      [selected]="mode()"
+      name="mode"
+      (selectedChange)="onModeChange($event)"
+    />
+    <app-button
+      variant="primary"
+      size="md"
+      [disabled]="!name()"
+      (click)="onSubmit()"
+    >
+      Continuar
+    </app-button>
+  </div>
+</div>

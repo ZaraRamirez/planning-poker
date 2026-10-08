@@ -1,0 +1,62 @@
+<app-game-layout>
+  <app-header
+    slot="header"
+    [gameName]="gameName()"
+    [userName]="currentPlayer()?.name ?? ''"
+    [isAdmin]="isAdmin()"
+    [currentMode]="currentPlayerMode()"
+    [cardModes]="cardModes"
+    [currentCardModeId]="currentCardModeId()"
+    [gameStatus]="gameStatus()"
+    (inviteClick)="onInviteClick()"
+    (modeChange)="onModeChange($event)"
+    (cardModeChange)="onCardModeChange($event)"
+  />
+
+  <app-voting-table
+    slot="table"
+    [players]="players()"
+    [currentUserId]="currentUserId()"
+    [gameStatus]="gameStatus()"
+    [isAdmin]="isAdmin()"
+    [hasAnyVote]="hasAnyVote()"
+    (revealCards)="onRevealCards()"
+    (resetGame)="onResetGame()"
+    (promotePlayer)="onPromotePlayer($event)"
+  />
+
+  @if (showCardPool()) {
+    <ng-container slot="pool">
+      <app-card-pool
+        [cards]="availableCards()"
+        [selectedCardId]="selectedCardId()"
+        [isDisabled]="currentUserHasVoted()"
+        (cardSelected)="onCardSelected($event)"
+      />
+    </ng-container>
+  }
+
+  @if (showVoteSummary()) {
+    <ng-container slot="pool">
+      <app-vote-summary
+        [voteGroups]="voteGroups()"
+        [average]="average()"
+      />
+    </ng-container>
+  }
+
+  @if (showUserForm() && gameExists()) {
+    <app-user-form slot="modal" title="Tu nombre" (userCreated)="onUserCreated($event)" />
+  }
+
+  @if (isJoining() && !gameExists()) {
+    <div slot="modal" class="game-room__error">
+      <p>Este link no es válido en este navegador.</p>
+      <p>Abre el link en el mismo navegador donde se creó la partida.</p>
+    </div>
+  }
+
+  @if (showInviteModal()) {
+    <app-invite-modal slot="modal" [link]="inviteLink()" (closeModal)="onCloseInvite()" />
+  }
+</app-game-layout>

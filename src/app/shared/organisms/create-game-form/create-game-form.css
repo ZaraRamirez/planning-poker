@@ -1,8 +1,26 @@
 .create-game-form {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: var(--spacing-lg);
   width: 100%;
-  max-width: 20rem;
+  max-width: 22rem;
+}
+
+.create-game-form app-button {
+  align-self: center;
+}
+
+@media (max-width: 768px) {
+  .create-game-form {
+    max-width: 85vw;
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .create-game-form {
+    max-width: 100%;
+    padding: 0 var(--spacing-md);
+  }
 }

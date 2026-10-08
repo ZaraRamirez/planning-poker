@@ -19,22 +19,22 @@ export class CreateGameFormComponent {
     const name = this.gameName();
     if (!this.touched()) return '';
     if (!name) return 'El nombre es requerido';
-    if (name.length < 5) return 'El nombre debe tener mínimo 5 caracteres';
-    if (name.length > 20) return 'El nombre debe tener máximo 20 caracteres';
     if (/[_,.*#/\-]/.test(name)) return 'El nombre no puede tener caracteres especiales';
     if (/^\d+$/.test(name)) return 'El nombre no puede contener solo números';
     if ((name.match(/\d/g) || []).length > 3) return 'El nombre puede tener máximo 3 números';
+    if (name.length < 5) return 'El nombre debe tener mínimo 5 caracteres';
+    if (name.length > 20) return 'El nombre debe tener máximo 20 caracteres';
     return '';
   });
 
   readonly isValid = computed(() => {
     const name = this.gameName();
     if (!name) return false;
-    return name.length >= 5 &&
-      name.length <= 20 &&
-      !/[_,.*#/\-]/.test(name) &&
+    return !/[_,.*#/\-]/.test(name) &&
       !/^\d+$/.test(name) &&
-      (name.match(/\d/g) || []).length <= 3;
+      (name.match(/\d/g) || []).length <= 3 &&
+      name.length >= 5 &&
+      name.length <= 20;
   });
 
   onNameChange(value: string): void {

@@ -1,6 +1,7 @@
 import { Component, input, computed } from '@angular/core';
 
 export type CardState = 'empty' | 'selected' | 'revealed';
+export type CardVariant = 'pool' | 'table';
 
 @Component({
   selector: 'app-card',
@@ -11,19 +12,17 @@ export type CardState = 'empty' | 'selected' | 'revealed';
 export class CardComponent {
   readonly state = input<CardState>('empty');
   readonly value = input<string | number>('');
-  readonly isSpectator = input<boolean>(false);
   readonly isSelectable = input<boolean>(false);
   readonly isActive = input<boolean>(false);
+  readonly variant = input<CardVariant>('pool');
 
   readonly classes = computed(() => [
     'card',
     `card--${this.state()}`,
-    this.isSpectator() ? 'card--spectator' : '',
+    this.variant() === 'table' ? 'card--table' : '',
     this.isSelectable() ? 'card--selectable' : '',
     this.isActive() ? 'card--active' : ''
   ].filter(Boolean).join(' '));
 
-  readonly showValue = computed(() =>
-    this.state() !== 'empty' && !this.isSpectator()
-  );
+  readonly showValue = computed(() => this.state() !== 'empty');
 }

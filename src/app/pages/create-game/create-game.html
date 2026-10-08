@@ -21,10 +21,13 @@
 
   @if (!showSplash()) {
     <div class="create-game__content">
-      <app-header gameName="Crear partida" />
+      <app-header gameName="Crear partida" [inline]="true" />
       <main class="create-game__main">
         <app-create-game-form (gameCreated)="onGameCreated($event)" />
       </main>
+      @if (showUserForm()) {
+        <app-user-form title="Tu nombre" (userCreated)="onUserCreated($event)" />
+      }
     </div>
   }
 </div>

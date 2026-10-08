@@ -1,17 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateGameComponent } from './create-game';
 import { Router } from '@angular/router';
-import { GameStore } from '../../core/store/game.store';
+import { GameStore } from '../../core/stores/game.store';
 
 describe('CreateGameComponent', () => {
   let component: CreateGameComponent;
   let fixture: ComponentFixture<CreateGameComponent>;
   let routerSpy: { navigate: ReturnType<typeof vi.fn> };
-  let gameStoreSpy: { createGame: ReturnType<typeof vi.fn> };
+  let gameStoreSpy: {
+    createGame: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(async () => {
     routerSpy = { navigate: vi.fn() };
-    gameStoreSpy = { createGame: vi.fn() };
+    gameStoreSpy = {
+      createGame: vi.fn()
+    };
 
     await TestBed.configureTestingModule({
       imports: [CreateGameComponent],

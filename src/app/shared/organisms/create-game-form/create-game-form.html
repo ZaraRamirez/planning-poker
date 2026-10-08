@@ -5,6 +5,7 @@
     [hasError]="touched() && !!errorMessage()"
     [errorMessage]="errorMessage()"
     (valueChange)="onNameChange($event)"
+    (enterPressed)="onSubmit()"
   />
   <app-button
     variant="primary"

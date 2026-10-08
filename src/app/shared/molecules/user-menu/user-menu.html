@@ -1,0 +1,71 @@
+<div class="user-menu">
+  <div
+    class="user-menu__trigger"
+    [class.user-menu__trigger--active]="showMenu()"
+    (click)="onAvatarClick()"
+  >
+    <app-avatar [name]="displayName()" size="md" />
+  </div>
+
+  @if (showMenu()) {
+    <div class="user-menu__popover" (click)="$event.stopPropagation()">
+
+      <div class="user-menu__user">
+        <span class="user-menu__name">{{ displayName() }}</span>
+      </div>
+
+      <div class="user-menu__divider"></div>
+
+      <div class="user-menu__section">
+        <span class="user-menu__section-title">Visualización</span>
+        <div class="user-menu__options">
+          <button
+            class="user-menu__option"
+            [class.user-menu__option--active]="currentMode() === 'player'"
+            (click)="onModeSelect('player')"
+          >
+            <span class="user-menu__option-label">Jugador</span>
+            <span class="user-menu__check" [class.user-menu__check--visible]="currentMode() === 'player'">✓</span>
+          </button>
+          <button
+            class="user-menu__option"
+            [class.user-menu__option--active]="currentMode() === 'spectator'"
+            (click)="onModeSelect('spectator')"
+          >
+            <span class="user-menu__option-label">Espectador</span>
+            <span class="user-menu__check" [class.user-menu__check--visible]="currentMode() === 'spectator'">✓</span>
+          </button>
+        </div>
+      </div>
+
+      @if (isAdmin() && cardModes().length > 0) {
+        <div class="user-menu__divider"></div>
+        <div class="user-menu__section">
+          <span class="user-menu__section-title">Modo de puntaje</span>
+          <div class="user-menu__options">
+            @for (mode of cardModes(); track mode.id) {
+              <button
+                class="user-menu__option"
+                [class.user-menu__option--active]="currentCardModeId() === mode.id"
+                [class.user-menu__option--disabled]="isCardModeDisabled()"
+                [disabled]="isCardModeDisabled()"
+                (click)="onCardModeSelect(mode.id)"
+              >
+                <span class="user-menu__option-label">{{ mode.label }}</span>
+                <span class="user-menu__check" [class.user-menu__check--visible]="currentCardModeId() === mode.id">✓</span>
+              </button>
+            }
+          </div>
+          @if (isCardModeDisabled()) {
+            <span class="user-menu__hint">Reinicia la partida para cambiar el modo</span>
+          }
+        </div>
+      }
+
+    </div>
+  }
+</div>
+
+@if (showMenu()) {
+  <div class="user-menu__backdrop" (click)="onCloseMenu()"></div>
+}

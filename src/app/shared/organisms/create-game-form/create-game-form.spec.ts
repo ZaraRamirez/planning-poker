@@ -38,7 +38,7 @@ describe('CreateGameFormComponent', () => {
   });
 
   it('should show error when name is more than 20 characters', () => {
-    component.onNameChange('abcdefghijklmnopqrstuvwxyz');
+    component.onNameChange('NombreMuyLargoSinNumeros');
     component.onSubmit();
     fixture.detectChanges();
     expect(component.errorMessage()).toBe('El nombre debe tener máximo 20 caracteres');

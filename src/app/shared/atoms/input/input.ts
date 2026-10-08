@@ -18,6 +18,7 @@ export class InputComponent {
   readonly errorMessage = input<string>('');
 
   readonly valueChange = output<string>();
+  readonly enterPressed = output<void>();
 
   readonly inputClasses = computed(() => [
     'input__field',
@@ -28,5 +29,9 @@ export class InputComponent {
   onInput(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.valueChange.emit(target.value);
+  }
+
+  onEnterPressed(): void {
+    this.enterPressed.emit();
   }
 }

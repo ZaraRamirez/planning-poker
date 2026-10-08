@@ -40,6 +40,13 @@ describe('RadioGroupComponent', () => {
     expect(labels[1].nativeElement.textContent).toBe('Espectador');
   });
 
+  it('should render label before radio circle', () => {
+    const option = fixture.debugElement.query(By.css('.radio-group__option'));
+    const children = option.nativeElement.children;
+    expect(children[0].classList).toContain('radio-group__label');
+    expect(children[2].classList).toContain('radio-group__custom');
+  });
+
   it('should mark selected option as checked', () => {
     componentRef.setInput('selected', 'player');
     fixture.detectChanges();

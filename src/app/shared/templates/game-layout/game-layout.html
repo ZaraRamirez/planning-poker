@@ -1,0 +1,19 @@
+<div class="game-layout">
+
+  <header class="game-layout__header">
+    <ng-content select="[slot=header]" />
+  </header>
+
+  <main class="game-layout__main">
+    <ng-content select="[slot=table]" />
+  </main>
+
+  <footer class="game-layout__footer">
+    <ng-content select="[slot=pool]" />
+  </footer>
+
+  <div class="game-layout__modal-host">
+    <ng-content select="[slot=modal]" />
+  </div>
+
+</div>

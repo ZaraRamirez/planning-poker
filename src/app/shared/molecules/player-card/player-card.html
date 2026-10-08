@@ -1,11 +1,31 @@
-<div class="player-card">
-  <app-card
-    [state]="cardState()"
-    [value]="cardValue()"
-    [isSpectator]="isSpectator()"
-  />
-  @if (isCurrentUser()) {
-    <app-avatar [name]="playerName()" size="md" />
+<div class="player-card" (click)="onCardClick()">
+  @if (isSpectator()) {
+    <app-avatar [name]="displayName()" size="md" />
+  } @else {
+    <app-card
+      [state]="cardState()"
+      [value]="cardValue()?.value ?? ''"
+      [variant]="cardVariant()"
+    />
   }
-  <span class="player-card__name">{{ playerName() }}</span>
+
+  <span class="player-card__name">{{ displayName() }}</span>
+
+  @if (isMenuOpen()) {
+    <div
+      class="player-card__menu"
+      [class.player-card__menu--down]="menuDirection() === 'down'"
+      (click)="$event.stopPropagation()"
+    >
+      <span class="player-card__menu-name">{{ displayName() }}</span>
+      <div class="player-card__menu-divider"></div>
+      <button class="player-card__menu-action" (click)="onPromote()">
+        Hacer administrador
+      </button>
+    </div>
+  }
 </div>
+
+@if (isMenuOpen()) {
+  <div class="player-card__backdrop" (click)="onCloseMenu()"></div>
+}

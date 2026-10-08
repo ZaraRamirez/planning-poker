@@ -1,0 +1,99 @@
+.voting-table {
+  --table-w: min(480px, 38vw, calc(48vh * (603 / 345)));
+  --ratio-h: calc(345 / 603);
+  --ratio-middle: calc(555 / 603);
+  --ratio-inner: calc(521 / 603);
+  --ratio-mh: calc(298 / 345);
+  --ratio-ih: calc(272 / 345);
+  --table-h: calc(var(--table-w) * var(--ratio-h));
+  --orbit-gap-x: 6rem;
+  --orbit-gap-y: 6rem;
+  --orbit-rx: calc(var(--table-w) / 2 + var(--orbit-gap-x));
+  --orbit-ry: calc(var(--table-h) / 2 + var(--orbit-gap-y));
+  position: relative;
+  width: var(--table-w);
+  height: var(--table-h);
+  flex-shrink: 0;
+}
+
+.voting-table__outer {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-border);
+  box-shadow:
+    0px 0px 20px 0px rgba(189, 189, 255, 0.10) inset,
+    0px 0px 15px 0px rgba(100, 41, 205, 0.40);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.voting-table__middle {
+  width: calc(var(--table-w) * var(--ratio-middle));
+  height: calc(var(--table-h) * var(--ratio-mh));
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-border);
+  box-shadow:
+    0px 0px 20px 0px rgba(189, 189, 255, 0.20) inset,
+    0px 8px 16px 0px rgba(100, 41, 205, 0.30);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.voting-table__inner {
+  width: calc(var(--table-w) * var(--ratio-inner));
+  height: calc(var(--table-h) * var(--ratio-ih));
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background-color: rgba(31, 13, 63, 0.60);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.voting-table__players {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.voting-table__player {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: all;
+  transform:
+    translate(-50%, -50%) translate(
+      calc(cos(var(--angle, 0rad)) * var(--orbit-rx)),
+      calc(sin(var(--angle, 0rad)) * var(--orbit-ry))
+    );
+  transition: transform var(--transition-normal);
+}
+
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .voting-table {
+    --table-w: min(250px, 30vw, calc(32vh * (603 / 345)));
+    --orbit-gap-x: 4rem;
+    --orbit-gap-y: 4rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1023px) {
+  .voting-table {
+    --table-w: min(260px, 40vw, calc(32vh * (603 / 345)));
+    --orbit-gap-x: 5rem;
+    --orbit-gap-y: 5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .voting-table {
+    --table-w: min(190px, 52vw, calc(24vh * (603 / 345)));
+    --orbit-gap-x: 3rem;
+    --orbit-gap-y: 3rem;
+  }
+}

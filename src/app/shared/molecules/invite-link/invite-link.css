@@ -1,24 +1,38 @@
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
 .invite-link {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
   width: 100%;
+  box-sizing: border-box;
 }
 
 .invite-link__url {
   width: 100%;
+  box-sizing: border-box;
   padding: var(--spacing-sm) var(--spacing-md);
-  border: 1.5px solid var(--color-border);
+  border: 1px solid var(--color-bg-input);
   border-radius: var(--radius-full);
-  background-color: transparent;
+  background-color: color-mix(in srgb, var(--color-bg-input) 8%, transparent);
+  overflow: hidden;
 }
 
 .invite-link__text {
+  display: block;
+  width: 100%;
   font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-regular);
+  color: white;
+  text-align: left;
+  direction: ltr;
+  unicode-bidi: plaintext;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: block;
 }

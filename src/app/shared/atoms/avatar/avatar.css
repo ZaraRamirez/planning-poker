@@ -3,8 +3,8 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-full);
-  background-color: var(--color-accent-light);
-  color: var(--color-bg-primary);
+  background-color: var(--color-bg-avatar);
+  color: var(--color-bg-secondary);
   font-family: var(--font-family);
   font-weight: var(--font-weight-bold);
   flex-shrink: 0;
@@ -17,13 +17,59 @@
 }
 
 .avatar--md {
-  width: 2.5rem;
-  height: 2.5rem;
-  font-size: var(--font-size-sm);
-}
-
-.avatar--lg {
   width: 3rem;
   height: 3rem;
   font-size: var(--font-size-md);
+}
+
+.avatar--lg {
+  width: 4rem;
+  height: 4rem;
+  font-size: var(--font-size-md);
+}
+
+.player-card .avatar {
+  width: var(--card-w, 2.5rem);
+  height: var(--card-w, 2.5rem);
+  font-size: var(--card-font-size, var(--font-size-sm));
+}
+
+@media (min-width: 769px) and (max-width: 1280px) {
+  .avatar--sm {
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: var(--font-size-xxs);
+  }
+
+  .avatar--md {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: var(--font-size-xs);
+  }
+
+  .avatar--lg {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  .avatar--sm {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: var(--font-size-xxs);
+  }
+
+  .avatar--md {
+    width: 1.875rem;
+    height: 1.875rem;
+    font-size: var(--font-size-xxs);
+  }
+
+  .avatar--lg {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: var(--font-size-xs);
+  }
 }

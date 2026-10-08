@@ -81,4 +81,12 @@ describe('InputComponent', () => {
     input.nativeElement.dispatchEvent(new Event('input'));
     expect(emittedValue).toBe('Sprint 32');
   });
+
+  it('should emit enterPressed when Enter key is pressed', () => {
+    let emitted = false;
+    component.enterPressed.subscribe(() => emitted = true);
+    const input = fixture.debugElement.query(By.css('.input__field'));
+    input.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(emitted).toBe(true);
+  });
 });

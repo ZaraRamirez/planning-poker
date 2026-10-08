@@ -9,6 +9,7 @@
     [disabled]="disabled()"
     [class]="inputClasses()"
     (input)="onInput($event)"
+    (keydown.enter)="onEnterPressed()"
   />
   @if (hasError() && errorMessage()) {
     <span class="input__error">{{ errorMessage() }}</span>

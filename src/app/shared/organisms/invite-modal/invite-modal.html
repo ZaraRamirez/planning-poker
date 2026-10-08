@@ -1,0 +1,11 @@
+<div class="invite-modal__overlay" (click)="onOverlayClick()">
+  <div class="invite-modal" (click)="$event.stopPropagation()">
+    <div class="invite-modal__header">
+      <h2 class="invite-modal__title">Invitar jugadores</h2>
+      <button class="invite-modal__close" (click)="onClose()">✕</button>
+    </div>
+    <div class="invite-modal__body">
+      <app-invite-link [link]="link()" />
+    </div>
+  </div>
+</div>

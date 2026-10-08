@@ -1,0 +1,21 @@
+<div class="card-pool">
+  @if (cards().length === 0) {
+    <p class="card-pool__empty">No hay cartas registradas</p>
+  } @else {
+    <p class="card-pool__title">Elige una carta 👇</p>
+    <div class="card-pool__cards">
+      @for (card of cards(); track card.id) {
+        <div class="card-pool__item">
+          <app-card
+            [variant]="'pool'"
+            [state]="isCardSelected(card.id) ? 'selected' : 'revealed'"
+            [value]="card.value"
+            [isSelectable]="!isDisabled()"
+            [isActive]="isCardSelected(card.id)"
+            (click)="onCardClick(card)"
+          />
+        </div>
+      }
+    </div>
+  }
+</div>

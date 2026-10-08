@@ -1,0 +1,113 @@
+.counting-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: cs-fade-in 0.35s ease both;
+}
+
+.counting-state__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  position: relative;
+}
+
+.counting-state__dots span {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: transparent;
+  border: 3px solid var(--color-bg-input);
+  box-sizing: border-box;
+  --dot-travel: 0.9rem;
+}
+
+.counting-state__dots span:nth-child(1) {
+  animation: cs-collision-chain 1.4s ease-in-out infinite;
+}
+
+.counting-state__dots span:nth-child(2) {
+  animation: cs-collision-chain 1.4s ease-in-out infinite;
+  animation-delay: 0.18s;
+}
+
+.counting-state__dots span:nth-child(3) {
+  animation: cs-collision-chain 1.4s ease-in-out infinite;
+  animation-delay: 0.36s;
+}
+
+.counting-state__dots span:nth-child(4) {
+  animation: cs-collision-chain 1.4s ease-in-out infinite;
+  animation-delay: 0.54s;
+}
+
+@keyframes cs-collision-chain {
+  0% {
+    transform: translateX(0);
+    border-color: var(--color-bg-input);
+  }
+
+  25% {
+    transform: translateX(var(--dot-travel));
+    border-color: var(--color-bg-secondary);
+  }
+
+  50% {
+    transform: translateX(0);
+    border-color: var(--color-bg-input);
+  }
+
+  75% {
+    transform: translateX(calc(var(--dot-travel) * -1));
+    border-color: var(--color-bg-secondary);
+  }
+
+  100% {
+    transform: translateX(0);
+    border-color: var(--color-bg-input);
+  }
+}
+
+.counting-state__label {
+  padding-top: var(--spacing-md);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+}
+
+@media (min-width: 769px) and (max-width: 1280px) {
+  .counting-state__dots {
+    gap: 0.75rem;
+  }
+
+  .counting-state__dots span {
+    width: 1rem;
+    height: 1rem;
+    border-width: 2.5px;
+    --dot-travel: 0.7rem;
+  }
+
+  .counting-state__label {
+    padding-top: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  .counting-state__dots {
+    gap: 0.6rem;
+  }
+
+  .counting-state__dots span {
+    width: 0.875rem;
+    height: 0.875rem;
+    border-width: 2px;
+    --dot-travel: 0.5rem;
+  }
+
+  .counting-state__label {
+    padding-top: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+  }
+}

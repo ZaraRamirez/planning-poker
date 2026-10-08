@@ -65,22 +65,6 @@ describe('CardComponent', () => {
     expect(value).toBeNull();
   });
 
-  it('should not show value when isSpectator is true', () => {
-    componentRef.setInput('state', 'selected');
-    componentRef.setInput('value', 8);
-    componentRef.setInput('isSpectator', true);
-    fixture.detectChanges();
-    const value = fixture.debugElement.query(By.css('.card__value'));
-    expect(value).toBeNull();
-  });
-
-  it('should apply spectator class when isSpectator is true', () => {
-    componentRef.setInput('isSpectator', true);
-    fixture.detectChanges();
-    const card = fixture.debugElement.query(By.css('.card'));
-    expect(card.nativeElement.classList).toContain('card--spectator');
-  });
-
   it('should apply selectable class when isSelectable is true', () => {
     componentRef.setInput('isSelectable', true);
     fixture.detectChanges();

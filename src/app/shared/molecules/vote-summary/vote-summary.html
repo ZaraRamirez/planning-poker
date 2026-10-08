@@ -1,0 +1,27 @@
+<div class="vote-summary">
+
+  <div class="vote-summary__groups">
+    @for (group of voteGroups(); track group.cardId) {
+      <div class="vote-summary__group">
+        <div class="vote-summary__card-wrapper">
+          <app-card
+            [variant]="'pool'"
+            [state]="'revealed'"
+            [value]="group.value"
+            [isSelectable]="false"
+            [isActive]="false"
+          />
+        </div>
+        <span class="vote-summary__count">{{ voteLabel(group.count) }}</span>
+      </div>
+    }
+  </div>
+
+  @if (hasNumericVotes()) {
+    <div class="vote-summary__average">
+      <span class="vote-summary__average-label">Promedio:</span>
+      <span class="vote-summary__average-value">{{ formattedAverage() }}</span>
+    </div>
+  }
+
+</div>

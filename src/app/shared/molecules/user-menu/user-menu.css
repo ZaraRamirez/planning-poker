@@ -148,6 +148,27 @@
   color: var(--color-accent-light);
 }
 
+.user-menu__leave {
+  display: block;
+  width: calc(100% - 2 * var(--spacing-sm));
+  margin: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-accent-light);
+  text-align: left;
+  transition: background-color var(--transition-fast);
+}
+
+.user-menu__leave:hover {
+  background-color: color-mix(in srgb, var(--color-bg-input) 20%, transparent);
+}
+
 .user-menu__hint {
   font-size: var(--font-size-xxs);
   color: color-mix(in srgb, var(--color-accent-light) 60%, transparent);

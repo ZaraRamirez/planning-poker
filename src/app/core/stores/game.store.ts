@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, OnDestroy } from '@angular/core';
-import { Game, Player, PlayerMode, Card } from '../models/game.model';
+import { Game, Player, PlayerMode, Card, UserProfile } from '../models/game.model';
 import { createInitialGame, createCards, DEFAULT_CARDS, computeVoteGroups, computeAverage, capitalizeName } from '../utils/game.utils';
 import { CARD_MODES } from '../models/card-mode.model';
 
@@ -10,9 +10,11 @@ export class GameStore implements OnDestroy {
   private readonly _currentPlayerId = signal<string | null>(null);
   private readonly _cards = signal<Card[]>(DEFAULT_CARDS);
   private readonly _currentCardModeId = signal<string>(CARD_MODES[0].id);
+  private readonly _savedProfile = signal<UserProfile | null>(null);
 
   private readonly STORAGE_KEY = 'planning_poker_game';
   private readonly PLAYER_KEY = 'planning_poker_player_id';
+  private readonly PROFILE_KEY = 'planning_poker_profile';
 
   // Canal de comunicación entre pestañas del mismo origen
   private readonly channel = new BroadcastChannel('planning_poker');
@@ -24,6 +26,9 @@ export class GameStore implements OnDestroy {
     // sessionStorage por pestaña (Cada pestaña recuerda su propio jugador)
     const savedPlayerId = sessionStorage.getItem(this.PLAYER_KEY);
     if (savedPlayerId) this._currentPlayerId.set(savedPlayerId);
+
+    // localStorage compartido (El navegador recuerda el último nombre y modo)
+    this._savedProfile.set(this.loadProfile());
 
     this.channel.onmessage = (event: MessageEvent<Game | null>) => {
       this._game.set(event.data);
@@ -70,6 +75,9 @@ export class GameStore implements OnDestroy {
     this.currentPlayer()?.mode ?? 'player'
   );
 
+  // Último nombre y modo usados en este navegador
+  readonly savedProfile = computed(() => this._savedProfile());
+
   // Estado de las cartas
 
   readonly availableCards = computed(() => this._cards());
@@ -87,6 +95,26 @@ export class GameStore implements OnDestroy {
   private loadFromStorage(): Game | null {
     const raw = localStorage.getItem(this.STORAGE_KEY);
     return raw ? JSON.parse(raw) : null;
+  }
+
+  private loadProfile(): UserProfile | null {
+    try {
+      const raw = localStorage.getItem(this.PROFILE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (typeof parsed?.name !== 'string' || !parsed.name) return null;
+      return {
+        name: parsed.name,
+        mode: parsed.mode === 'spectator' ? 'spectator' : 'player'
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  private saveProfile(profile: UserProfile): void {
+    this._savedProfile.set(profile);
+    localStorage.setItem(this.PROFILE_KEY, JSON.stringify(profile));
   }
 
   // Persiste el estado y lo sincroniza con todas las pestañas
@@ -118,6 +146,7 @@ export class GameStore implements OnDestroy {
 
     this.persist({ ...game, players: [adminPlayer], status: 'voting' });
     this.saveCurrentPlayer(adminPlayer.id);
+    this.saveProfile({ name: adminPlayer.name, mode });
   }
 
   joinGame(gameId: string, playerName: string, playerMode: PlayerMode): void {
@@ -136,7 +165,8 @@ export class GameStore implements OnDestroy {
     const newPlayer: Player = {
       id: crypto.randomUUID(),
       name: capitalizeName(playerName),
-      role: 'player',
+      // Si la partida quedó sin admin, quien entra hereda el rol
+      role: game.players.some(p => p.role === 'admin') ? 'player' : 'admin',
       mode: playerMode,
       selectedCard: null
     };
@@ -148,6 +178,28 @@ export class GameStore implements OnDestroy {
     });
 
     this.saveCurrentPlayer(newPlayer.id);
+    this.saveProfile({ name: newPlayer.name, mode: playerMode });
+  }
+
+  // Saca al jugador actual de la partida y libera su puesto
+  leaveGame(): void {
+    const game = this._game();
+    const player = this.currentPlayer();
+    if (!game || !player) return;
+
+    let players = game.players.filter(p => p.id !== player.id);
+
+    // Si se va el único admin, el primer jugador restante hereda el rol
+    if (players.length > 0 && !players.some(p => p.role === 'admin')) {
+      players = players.map((p, i) => i === 0 ? { ...p, role: 'admin' as const } : p);
+    }
+
+    this.persist({
+      ...game,
+      players,
+      status: players.length === 0 ? 'waiting' : game.status
+    });
+    this.clearCurrentPlayer();
   }
 
   updatePlayerVote(playerId: string, card: Card): void {
@@ -231,6 +283,12 @@ export class GameStore implements OnDestroy {
         p.id === playerId ? { ...p, mode, selectedCard: null } : p
       )
     });
+
+    // Recuerda el nuevo modo solo si el cambio es del jugador actual
+    const current = this.currentPlayer();
+    if (current && current.id === playerId) {
+      this.saveProfile({ name: current.name, mode });
+    }
   }
 
   // Acciones de sesión

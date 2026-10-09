@@ -21,6 +21,7 @@ export class UserMenuComponent {
 
   readonly modeChange = output<PlayerMode>();
   readonly cardModeChange = output<string>();
+  readonly leaveGame = output<void>();
 
   readonly showMenu = signal(false);
 
@@ -42,6 +43,11 @@ export class UserMenuComponent {
   onCardModeSelect(modeId: string): void {
     if (this.isCardModeDisabled()) return;
     this.cardModeChange.emit(modeId);
+  }
+
+  onLeaveGame(): void {
+    this.leaveGame.emit();
+    this.showMenu.set(false);
   }
 
   onCloseMenu(): void {

@@ -11,6 +11,7 @@
     (inviteClick)="onInviteClick()"
     (modeChange)="onModeChange($event)"
     (cardModeChange)="onCardModeChange($event)"
+    (leaveGame)="onLeaveGame()"
   />
 
   <app-voting-table
@@ -46,7 +47,13 @@
   }
 
   @if (showUserForm() && gameExists()) {
-    <app-user-form slot="modal" title="Tu nombre" (userCreated)="onUserCreated($event)" />
+    <app-user-form
+      slot="modal"
+      title="Tu nombre"
+      [initialName]="savedProfile()?.name ?? ''"
+      [initialMode]="savedProfile()?.mode ?? 'player'"
+      (userCreated)="onUserCreated($event)"
+    />
   }
 
   @if (isJoining() && !gameExists()) {

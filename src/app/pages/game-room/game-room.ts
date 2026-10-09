@@ -49,6 +49,7 @@ export class GameRoomComponent implements OnInit {
   readonly cardModes = this.gameStore.cardModes;
   readonly currentCardModeId = this.gameStore.currentCardModeId;
   readonly average = this.gameStore.average;
+  readonly savedProfile = this.gameStore.savedProfile;
 
   readonly gameExists = computed(() => this.gameStore.game() !== null);
   readonly currentUserId = computed(() => this.currentPlayer()?.id ?? '');
@@ -85,8 +86,12 @@ export class GameRoomComponent implements OnInit {
   }
 
   onUserCreated(data: { name: string; mode: 'player' | 'spectator' }): void {
+    const game = this.gameStore.game();
     if (this.isJoining() && this.gameIdFromUrl()) {
       this.gameStore.joinGame(this.gameIdFromUrl()!, data.name, data.mode);
+    } else if (game && game.players.length > 0) {
+      // Re-ingreso con la mesa ocupada: se une sin reemplazar a los demás
+      this.gameStore.joinGame(game.id, data.name, data.mode);
     } else {
       this.gameStore.addAdminPlayer(data.name, data.mode);
     }
@@ -112,6 +117,10 @@ export class GameRoomComponent implements OnInit {
     if (userId) {
       this.gameStore.updatePlayerMode(userId, mode);
     }
+  }
+
+  onLeaveGame(): void {
+    this.gameStore.leaveGame();
   }
 
   onPromotePlayer(playerId: string): void {

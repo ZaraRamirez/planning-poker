@@ -94,4 +94,35 @@ describe('UserFormComponent', () => {
     component.onSubmit();
     expect(emitted).toBe(false);
   });
+
+  describe('prefilled values', () => {
+
+    beforeEach(() => {
+      componentRef.setInput('initialName', 'Mateo');
+      componentRef.setInput('initialMode', 'spectator');
+      fixture.detectChanges();
+    });
+
+    it('should prefill name and mode from initial inputs', () => {
+      expect(component.name()).toBe('Mateo');
+      expect(component.mode()).toBe('spectator');
+      const input = fixture.debugElement.query(By.css('input'));
+      expect(input.nativeElement.value).toBe('Mateo');
+    });
+
+    it('should let the user overwrite the prefilled values', () => {
+      component.onNameChange('Carla');
+      component.onModeChange('player');
+      fixture.detectChanges();
+      expect(component.name()).toBe('Carla');
+      expect(component.mode()).toBe('player');
+    });
+
+    it('should emit the prefilled values on submit', () => {
+      let emitted: { name: string; mode: string } | null = null;
+      component.userCreated.subscribe(value => emitted = value);
+      component.onSubmit();
+      expect(emitted).toEqual({ name: 'Mateo', mode: 'spectator' });
+    });
+  });
 });

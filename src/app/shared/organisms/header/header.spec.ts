@@ -85,4 +85,14 @@ describe('HeaderComponent', () => {
     button.triggerEventHandler('click', null);
     expect(emitted).toBe(true);
   });
+
+  it('should re-emit leaveGame from user-menu', () => {
+    componentRef.setInput('userName', 'Luisa');
+    fixture.detectChanges();
+    const onLeave = vi.fn();
+    component.leaveGame.subscribe(onLeave);
+    const userMenu = fixture.debugElement.query(By.css('app-user-menu'));
+    userMenu.triggerEventHandler('leaveGame', undefined);
+    expect(onLeave).toHaveBeenCalledTimes(1);
+  });
 });

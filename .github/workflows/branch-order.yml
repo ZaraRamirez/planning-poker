@@ -1,0 +1,27 @@
+name: branch-order
+on:
+  pull_request:
+    branches: [main, develop]
+    types: [opened, synchronize, reopened, edited]
+jobs:
+  check-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: feature/* -> develop, release/* -> main
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          case "$BASE_REF" in
+            develop) PREFIJO="feature/" ;;
+            main)    PREFIJO="release/" ;;
+          esac
+          case "$HEAD_REF" in
+            "$PREFIJO"?*)
+              echo "Origen valido: $HEAD_REF -> $BASE_REF"
+              ;;
+            *)
+              echo "::error::Solo ramas $PREFIJO* pueden entrar a $BASE_REF. Origen actual: $HEAD_REF"
+              exit 1
+              ;;
+          esac

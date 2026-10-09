@@ -1,4 +1,4 @@
-import { Component, input, output, computed, signal } from '@angular/core';
+import { Component, input, output, computed, signal, linkedSignal } from '@angular/core';
 import { InputComponent } from '../../atoms/input/input';
 import { ButtonComponent } from '../../atoms/button/button';
 import { RadioGroupComponent } from '../../molecules/radio-group/radio-group';
@@ -13,11 +13,14 @@ import { PlayerMode } from '../../../core/models/game.model';
 })
 export class UserFormComponent {
   readonly title = input<string>('Tu nombre');
+  readonly initialName = input<string>('');
+  readonly initialMode = input<PlayerMode>('player');
 
   readonly userCreated = output<{ name: string; mode: PlayerMode }>();
 
-  readonly name = signal('');
-  readonly mode = signal<PlayerMode>('player');
+  // Parten del valor recordado y siguen siendo editables
+  readonly name = linkedSignal(() => this.initialName());
+  readonly mode = linkedSignal<PlayerMode>(() => this.initialMode());
   readonly touched = signal(false);
 
   readonly modeOptions = [

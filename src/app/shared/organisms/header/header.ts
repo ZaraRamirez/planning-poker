@@ -24,6 +24,7 @@ export class HeaderComponent {
   readonly inviteClick = output<void>();
   readonly modeChange = output<PlayerMode>();
   readonly cardModeChange = output<string>();
+  readonly leaveGame = output<void>();
 
   onInviteClick(): void {
     this.inviteClick.emit();

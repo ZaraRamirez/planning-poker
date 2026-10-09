@@ -22,6 +22,7 @@
         [gameStatus]="gameStatus()"
         (modeChange)="modeChange.emit($event)"
         (cardModeChange)="cardModeChange.emit($event)"
+        (leaveGame)="leaveGame.emit()"
       />
       <app-button variant="secondary" size="sm" (click)="onInviteClick()">
         Invitar jugadores

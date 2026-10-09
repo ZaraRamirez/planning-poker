@@ -81,6 +81,25 @@ describe('UserMenuComponent', () => {
     expect(activeOptions.length).toBe(1);
   });
 
+  it('should render leave game button in popover', () => {
+    component.showMenu.set(true);
+    fixture.detectChanges();
+    const leave = fixture.debugElement.query(By.css('.user-menu__leave'));
+    expect(leave).toBeTruthy();
+    expect(leave.nativeElement.textContent.trim()).toBe('Salir de la partida');
+  });
+
+  it('should emit leaveGame and close menu when leave button is clicked', () => {
+    component.showMenu.set(true);
+    fixture.detectChanges();
+    const onLeave = vi.fn();
+    component.leaveGame.subscribe(onLeave);
+    const leave = fixture.debugElement.query(By.css('.user-menu__leave'));
+    leave.triggerEventHandler('click', null);
+    expect(onLeave).toHaveBeenCalledTimes(1);
+    expect(component.showMenu()).toBe(false);
+  });
+
   function openAdminMenu() {
     componentRef.setInput('isAdmin', true);
     componentRef.setInput('cardModes', [...CARD_MODES]);

@@ -14,6 +14,12 @@ export interface Player {
   selectedCard: Card | null;
 }
 
+// Perfil recordado en el navegador para prellenar el formulario
+export interface UserProfile {
+  name: string;
+  mode: PlayerMode;
+}
+
 export interface Card {
   id: string;
   value: string | number;
